@@ -417,7 +417,9 @@ class CrewEngine:
                 headers=self._request_headers(),
                 json=body,
             ) as response:
-                response.raise_for_status()
+                if response.status_code >= 400:
+                    await response.aread()
+                    response.raise_for_status()
                 async for line in response.aiter_lines():
                     if not line or not line.startswith("data:"):
                         continue

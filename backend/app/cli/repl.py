@@ -141,7 +141,9 @@ async def _stream_openrouter(
             headers=headers,
             json=body,
         ) as response:
-            response.raise_for_status()
+            if response.status_code >= 400:
+                await response.aread()
+                response.raise_for_status()
             async for line in response.aiter_lines():
                 if not line or not line.startswith("data:"):
                     continue
@@ -1175,9 +1177,14 @@ class Repl:
             display.finish()
         except httpx.HTTPStatusError as exc:
             display.finish()
+            try:
+                detail = exc.response.text[:200] if exc.response.text else None
+            except httpx.ResponseNotRead:
+                detail = f"HTTP {exc.response.status_code}"
             self._out.print_error(
                 f"API error: {exc.response.status_code}",
-                detail=exc.response.text[:200] if exc.response.text else None,
+                detail=detail,
+                suggestion="Check your API key and model ID",
             )
             self._conversation.remove_last_message()
             return

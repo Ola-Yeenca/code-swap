@@ -125,9 +125,13 @@ async def _oneshot(api_key: str, model: str, prompt: str) -> None:
 
     except httpx.HTTPStatusError as exc:
         display.finish()
+        try:
+            detail = exc.response.text[:200] if exc.response.text else None
+        except httpx.ResponseNotRead:
+            detail = f"HTTP {exc.response.status_code}"
         out.print_error(
             f"API error: {exc.response.status_code}",
-            detail=exc.response.text[:200] if exc.response.text else None,
+            detail=detail,
             suggestion="Check your API key and model ID",
         )
     except Exception as exc:  # noqa: BLE001
