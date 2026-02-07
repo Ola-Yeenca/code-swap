@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+*.whl
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node.js
+node_modules/
+.next/
+.turbo/
+frontend/dist/
+frontend/.vite/
+frontend/.tsbuild/
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets & credentials
+.env
+.env.*
+!.env.example
+*.pem
+credentials.json
+
+# Database
+*.sqlite
+*.sqlite3
+unused.db
+backend/*.db
+
+# Claude Code
+.claude/
+backend/.claude
+
+# Internal docs
+launch-copy.md
+
+# Generated output
+results/
+openrouter-models.txt
+
+# Misc
+*.log
