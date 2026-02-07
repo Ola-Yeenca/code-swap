@@ -25,6 +25,7 @@ from app.cli.config import (  # noqa: E402
     CONFIG_PATH,
     OPENROUTER_BASE_URL,
     ensure_setup,
+    is_model_configured,
     load_config,
     resolve_api_key,
     resolve_model,
@@ -164,6 +165,42 @@ def cli(ctx: click.Context, model: str | None, api_key: str | None, yolo: bool) 
         raise SystemExit(1)
 
     api_key_resolved = resolve_api_key(api_key)
+
+    # -- First-run model picker --
+    # If the user hasn't explicitly chosen a model (and didn't pass --model),
+    # show the interactive picker so they can pick their preferred default.
+    if model is None and not is_model_configured():
+        out.console.print()
+        out.console.print(
+            "  [accent]Welcome to code-swap![/]\n"
+            "  [muted]Let's pick your default model. You can change it anytime with /model.[/]"
+        )
+        out.console.print()
+
+        try:
+            from app.cli.picker import fetch_models, pick_model
+
+            out.console.print("[muted]  Fetching available models from OpenRouter...[/]")
+            model_list = asyncio.run(fetch_models(api_key_resolved))
+
+            if model_list:
+                chosen = pick_model(model_list, current_model=None)
+                if chosen:
+                    cfg = load_config()
+                    cfg.model = chosen
+                    cfg.model_selected = True
+                    save_config(cfg)
+                    model = chosen
+                    out.console.print()
+                    out.console.print(f"  [success]\u2714[/] Default model set to [cyan]{chosen}[/]")
+                    out.console.print(f"  [muted]Saved to {CONFIG_PATH}[/]")
+                    out.console.print()
+        except KeyboardInterrupt:
+            out.console.print("\n[muted]  Skipped — using default model.[/]")
+        except Exception as exc:  # noqa: BLE001
+            out.console.print(f"\n[muted]  Could not fetch models: {exc}[/]")
+            out.console.print("[muted]  Using default model. Change anytime with /model.[/]")
+
     model_resolved = resolve_model(model)
 
     out.print_banner(model=model_resolved, key_set=True)
@@ -292,6 +329,7 @@ def config(key: str | None, model: str | None, show: bool) -> None:
         cfg.api_key = key
     if model is not None:
         cfg.model = model
+        cfg.model_selected = True
 
     path = save_config(cfg)
     out.print_success(f"Configuration saved to {path}")

@@ -45,8 +45,10 @@ class ModelPricing:
 # Hardcoded for popular models. Falls back to "unknown" for unlisted ones.
 _PRICING_TABLE: dict[str, ModelPricing] = {
     # Anthropic
+    "anthropic/claude-opus-4-6":         ModelPricing(input=15.00, output=75.00),
     "anthropic/claude-sonnet-4-5":       ModelPricing(input=3.00,  output=15.00),
     "anthropic/claude-opus-4":           ModelPricing(input=15.00, output=75.00),
+    "anthropic/claude-haiku-4-5":        ModelPricing(input=0.80,  output=4.00),
     "anthropic/claude-haiku-3.5":        ModelPricing(input=0.80,  output=4.00),
     # OpenAI
     "openai/gpt-5":                      ModelPricing(input=2.50,  output=10.00),
@@ -85,6 +87,7 @@ class AppConfig:
     """In-memory representation of ~/.code_swap.yaml."""
     api_key: str | None = None
     model: str = DEFAULT_MODEL
+    model_selected: bool = False  # True once user explicitly picks a model
     auto_save: bool = True
     theme: str = "dark"
     auto_resume: bool = False
@@ -110,6 +113,7 @@ def load_config() -> AppConfig:
     return AppConfig(
         api_key=raw.get("api_key"),
         model=raw.get("model", DEFAULT_MODEL),
+        model_selected=raw.get("model_selected", False),
         auto_save=raw.get("auto_save", True),
         theme=raw.get("theme", "dark"),
         auto_resume=raw.get("auto_resume", False),
@@ -124,6 +128,7 @@ def save_config(cfg: AppConfig) -> Path:
     """Persist *cfg* to the config file.  Returns the path written."""
     data: dict[str, Any] = {
         "model": cfg.model,
+        "model_selected": cfg.model_selected,
         "auto_save": cfg.auto_save,
         "theme": cfg.theme,
         "auto_resume": cfg.auto_resume,
@@ -144,6 +149,22 @@ def save_config(cfg: AppConfig) -> Path:
 # ---------------------------------------------------------------------------
 # Resolution helpers
 # ---------------------------------------------------------------------------
+
+def is_model_configured() -> bool:
+    """Check whether the user has explicitly chosen a model.
+
+    Returns ``False`` when the ``model_selected`` flag is not set —
+    meaning the user has never actively picked a preferred model through
+    the first-run picker or ``config --model`` and should be prompted.
+    """
+    if not CONFIG_PATH.exists():
+        return False
+    try:
+        raw: dict[str, Any] = yaml.safe_load(CONFIG_PATH.read_text()) or {}
+    except Exception:
+        return False
+    return raw.get("model_selected", False) is True
+
 
 def resolve_api_key(cli_key: str | None = None) -> str:
     """Resolve the OpenRouter API key.

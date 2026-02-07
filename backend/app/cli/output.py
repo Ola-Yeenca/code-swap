@@ -55,7 +55,7 @@ console = Console(theme=_theme, highlight=False)
 # Version constant (single source of truth for the CLI banner)
 # ---------------------------------------------------------------------------
 
-VERSION = "0.4.0"
+VERSION = "0.5.1"
 
 # ---------------------------------------------------------------------------
 # Results directory
