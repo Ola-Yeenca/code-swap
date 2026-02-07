@@ -10,9 +10,10 @@ import httpx
 from InquirerPy import inquirer
 
 POPULAR_MODEL_IDS: list[str] = [
-    "anthropic/claude-opus-4-6",
-    "anthropic/claude-sonnet-4-5",
-    "anthropic/claude-haiku-4-5",
+    "anthropic/claude-opus-4.6",
+    "anthropic/claude-opus-4.5",
+    "anthropic/claude-sonnet-4.5",
+    "anthropic/claude-haiku-4.5",
     "openai/gpt-5",
     "openai/gpt-4.1",
     "openai/gpt-4.1-mini",
@@ -20,13 +21,13 @@ POPULAR_MODEL_IDS: list[str] = [
     "openai/o4-mini",
     "google/gemini-2.5-pro",
     "google/gemini-2.5-flash",
-    "google/gemini-2.0-flash",
+    "google/gemini-2.0-flash-001",
     "deepseek/deepseek-r1",
     "deepseek/deepseek-chat-v3-0324",
     "meta-llama/llama-4-maverick",
     "meta-llama/llama-4-scout",
     "mistralai/mistral-large",
-    "mistralai/mistral-small",
+    "mistralai/mistral-medium-3.1",
 ]
 
 _POPULAR_SET = set(POPULAR_MODEL_IDS)

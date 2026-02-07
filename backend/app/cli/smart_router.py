@@ -65,13 +65,13 @@ KEYWORD_SIGNALS: dict[TaskCategory, list[str]] = {
 # ---------------------------------------------------------------------------
 
 DEFAULT_ROUTES: dict[TaskCategory, str | None] = {
-    TaskCategory.CODE_GENERATION: "anthropic/claude-sonnet-4-5",
+    TaskCategory.CODE_GENERATION: "anthropic/claude-sonnet-4.5",
     TaskCategory.CODE_REVIEW:     "google/gemini-2.5-pro",
-    TaskCategory.DEBUGGING:       "anthropic/claude-sonnet-4-5",
+    TaskCategory.DEBUGGING:       "anthropic/claude-sonnet-4.5",
     TaskCategory.RESEARCH:        "deepseek/deepseek-r1",
-    TaskCategory.REFACTORING:     "anthropic/claude-sonnet-4-5",
+    TaskCategory.REFACTORING:     "anthropic/claude-sonnet-4.5",
     TaskCategory.CREATIVE:        "openai/gpt-4.1",
-    TaskCategory.GENERAL:         None,  # fall back to user default
+    TaskCategory.GENERAL:         None,
 }
 
 # Confidence threshold for a category to be considered relevant.

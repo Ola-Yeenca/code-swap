@@ -25,7 +25,7 @@ import yaml
 
 CONFIG_PATH: Path = Path.home() / ".code_swap.yaml"
 
-DEFAULT_MODEL: str = "anthropic/claude-sonnet-4-5"
+DEFAULT_MODEL: str = "anthropic/claude-sonnet-4.5"
 
 ENV_VAR: str = "OPENROUTER_API_KEY"
 
@@ -44,12 +44,11 @@ class ModelPricing:
 
 # Hardcoded for popular models. Falls back to "unknown" for unlisted ones.
 _PRICING_TABLE: dict[str, ModelPricing] = {
-    # Anthropic
-    "anthropic/claude-opus-4-6":         ModelPricing(input=15.00, output=75.00),
-    "anthropic/claude-sonnet-4-5":       ModelPricing(input=3.00,  output=15.00),
-    "anthropic/claude-opus-4":           ModelPricing(input=15.00, output=75.00),
-    "anthropic/claude-haiku-4-5":        ModelPricing(input=0.80,  output=4.00),
-    "anthropic/claude-haiku-3.5":        ModelPricing(input=0.80,  output=4.00),
+    "anthropic/claude-opus-4.6":         ModelPricing(input=15.00, output=75.00),
+    "anthropic/claude-opus-4.5":         ModelPricing(input=15.00, output=75.00),
+    "anthropic/claude-sonnet-4.5":       ModelPricing(input=3.00,  output=15.00),
+    "anthropic/claude-haiku-4.5":        ModelPricing(input=0.80,  output=4.00),
+    "anthropic/claude-3.5-haiku":        ModelPricing(input=0.80,  output=4.00),
     # OpenAI
     "openai/gpt-5":                      ModelPricing(input=2.50,  output=10.00),
     "openai/gpt-4.1":                    ModelPricing(input=2.00,  output=8.00),
