@@ -272,7 +272,7 @@ API key resolution order: `--api-key` flag > `OPENROUTER_API_KEY` env var > conf
 Contributions are welcome. Please open an issue first to discuss what you would like to change.
 
 ```bash
-git clone https://github.com/code-swap/code-swap.git
+git clone https://github.com/Ola-Yeenca/code-swap.git
 cd code-swap/backend
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
